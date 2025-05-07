@@ -9,6 +9,10 @@ DIAG_NONE     = 0
 DIAG_DELETE   = 1
 DIAG_SOLVABLE = 2
 
+CLUE_UNSOLVED = 0
+CLUE_PARTIAL  = 1
+CLUE_SOLVED   = 2
+
 """credits to stackoverflow"""
 class style:
     BLACK = '\033[30m'
