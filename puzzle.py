@@ -30,8 +30,6 @@ class Puzzle:
             col = []
             for y in range(self.dy):
                 cell = Cell(x, y)
-                #if y == 4:
-                #    cell = Cell(x, y, CELL_FILLED)
                 col.append(cell)
             self.cells.append(col)
             self.columns.append(col)
@@ -60,7 +58,7 @@ class Puzzle:
 
         vert_clues_str = ""
         for i in range(len_vert_clues -1, -1, -1):
-            vert_clues_str += "   " * len_hori_clues
+            vert_clues_str += " " * len_hori_clues * 3 + " "
             for j in range(self.dx):
                 if i >= len(cols[j].clues):
                     vert_clues_str += "  "
@@ -69,11 +67,16 @@ class Puzzle:
                 vert_clues_str += " "
             vert_clues_str += "\n"
 
-
-
-        hori_clues_grid_str = "\n"
+        hori_clues_grid_str = ""
         for i in range(self.dx):
+            for j in range(len_hori_clues -1, -1, -1):
+                if j >= len(rows[i].clues):
+                    hori_clues_grid_str += "  "
+                else:
+                    hori_clues_grid_str += str(rows[i].clues[j])
+                hori_clues_grid_str += " "
+            hori_clues_grid_str += " "
             for j in range(self.dy):
-                hori_clues_grid_str += str(cels[j][i]) + " "
+                hori_clues_grid_str += str(cels[j][i]) + "  "
             hori_clues_grid_str += "\n"
         return vert_clues_str + hori_clues_grid_str + self.name
