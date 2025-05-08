@@ -1,4 +1,5 @@
 from utility import CLUE_UNSOLVED, CLUE_PARTIAL, CLUE_SOLVED, get_super, style
+from sequence import Sequence
 
 '''
 Defines the tomography hints that are initially provided.
@@ -7,10 +8,10 @@ Defines the tomography hints that are initially provided.
 '''
 class Clue:
     def __init__(self, value, index):
-        self.value = value
-        self.index = index
-        self.solved = CLUE_UNSOLVED
-        self.sequence = None
+        self.value: int = value
+        self.index: int = index
+        self.solved: int = CLUE_UNSOLVED
+        self.sequence: Sequence = None
 
     def __repr__(self):
         return self.__str__()

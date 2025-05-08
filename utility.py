@@ -1,17 +1,18 @@
-AXIS_X = 0
-AXIS_Y = 1
-
+# Cell States
 CELL_EMPTY   = 0
 CELL_FILLED  = 1
 CELL_CROSSED = 2
 
-DIAG_NONE     = 0
-DIAG_DELETE   = 1
-DIAG_SOLVABLE = 2
-
+# Clue States
 CLUE_UNSOLVED = 0
 CLUE_PARTIAL  = 1
 CLUE_SOLVED   = 2
+
+# Diagnosis Values
+DIAG_ERROR   = -1
+DIAG_NONE     = 0
+DIAG_DELETE   = 1
+DIAG_SOLVABLE = 2
 
 """credits to stackoverflow"""
 class style:
