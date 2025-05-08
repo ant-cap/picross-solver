@@ -1,14 +1,13 @@
-from solver import Solver
+
 from puzzle import Puzzle
 from line import Line
-from turn import Turn
-from clue import Clue
+from clue import Clue, CLUE_SOLVED
 
 from utility import DIAG_ERROR, DIAG_NONE, DIAG_DELETE, DIAG_SOLVABLE, \
                     CELL_EMPTY, CELL_FILLED, CELL_CROSSED
 
 class Move:
-    def __init__(self, turn: Turn):
+    def __init__(self, turn):
         self.turn = turn
         self.puzzle = turn.solver.puzzle
         self.lines: list[Line] = self.puzzle.columns + self.puzzle.rows
@@ -20,11 +19,18 @@ class Move:
         self.DecideMove()
 
     def DecideMove(self):
+        def ProposeDecision(decision: int, line: Line):
+            if self.decision == DIAG_NONE:
+                self.decision = decision
+                self.line = line
+            elif self.decision > decision:
+                self.decision = decision
+                self.line = line
+    
         for line in self.lines:
             try:
                 if self.CanDelete(line):
-                    self.decision = DIAG_DELETE
-                    self.line = line
+                    ProposeDecision(DIAG_DELETE, line)
                     break
             except Exception as e:
                 self.exception = e
@@ -40,9 +46,16 @@ class Move:
     def CanDelete(self, line: Line) -> bool:
         if not line.clues:
             return True
-        if line.clues[0].value == 0:
+        if line.clues[0].value == 0 and line.clues[0].state != CLUE_SOLVED:
             return True
         return False
+    
+    def CanSolveSegment(self, line: Line) -> bool:
+        for i in range(len(line.segments)):
+            segment = line.segments[i]
+            if segment.solved:
+                continue
+            
         
 def DoMove(line: Line, decision: int):
     def Cross(start: int, stop: int = 0):

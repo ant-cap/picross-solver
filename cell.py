@@ -1,5 +1,4 @@
-from utility import CELL_EMPTY, CELL_FILLED, CELL_CROSSED
-from line import Line
+from utility import CELL_EMPTY, CELL_FILLED, CELL_CROSSED, style
 
 '''
 Defines a cell on the grid.
@@ -9,17 +8,18 @@ Defines a cell on the grid.
 class Cell:
     def __init__(self, x: int = 0, y: int = 0, state: int = CELL_EMPTY):
         self.state: int = state
-        
-        self.row: Line = None
-        self.col: Line = None
+        self.changedState: bool = False
 
     def __str__(self):
+        s = style.BLUE if self.changedState else style.RESET
         if self.state == CELL_EMPTY:
-            return "_"
+            s += "_"
         elif self.state == CELL_FILLED:
-            return "█"
+            s += "█"
         else:
-            return "X" 
+            s += "X"
+        self.changedState = False
+        return s + style.RESET
         
     def __repr__(self):
         return self.__str__()
@@ -28,6 +28,4 @@ class Cell:
         if self.state == state:
             return
         self.state = state
-        if self.row and self.col:
-            self.row.Update()
-            self.col.Update()
+        self.changedState = True

@@ -1,12 +1,16 @@
 from line import Line
 from clue import Clue
-from cell import Cell, CELL_FILLED
+from cell import Cell
 
 class Puzzle:
     def __init__(self, data):
         self.solved = False
-
         self.name = data[0]
+        self.rows: list[Line] = []
+        self.columns: list[Line] = []
+        self.cells: list[list[Cell]] = []
+        self.dx = len(data[1])
+        self.dy = len(data[2])
 
         colclues = data[1]
         rowclues = data[2]
@@ -18,13 +22,6 @@ class Puzzle:
         for i in range(len(rowclues)):
             for j in range(len(rowclues[i])):
                 rowclues[i][j] = Clue(rowclues[i][j], j)
-
-        self.dx = len(colclues)
-        self.dy = len(rowclues)
-
-        self.rows = []
-        self.columns = []
-        self.cells = []
 
         for x in range(self.dx):
             col = []
@@ -80,3 +77,14 @@ class Puzzle:
                 hori_clues_grid_str += str(cels[j][i]) + "  "
             hori_clues_grid_str += "\n"
         return vert_clues_str + hori_clues_grid_str + self.name
+    
+    def Update(self):
+        updates: set[Line] = set()
+        for x in range(self.dx):
+            for y in range(self.dy):
+                if self.cells[x][y].changedState:
+                    updates.add(self.columns[x])
+                    updates.add(self.rows[y])
+        
+        for line in updates:
+            line.Update()

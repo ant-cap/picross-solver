@@ -10,7 +10,7 @@ class Clue:
     def __init__(self, value, index):
         self.value: int = value
         self.index: int = index
-        self.solved: int = CLUE_UNSOLVED
+        self.state: int = CLUE_UNSOLVED
         self.sequence: Sequence = None
 
     def __repr__(self):
@@ -18,12 +18,12 @@ class Clue:
 
     def __str__(self):
         return self.GetStyle() + "{}{}".format(self.value, get_super(self.index)) + style.RESET
-    
+
     def GetStyle(self):
-        if self.solved == CLUE_UNSOLVED:
+        if self.state == CLUE_UNSOLVED:
             return style.RED
-        elif self.solved == CLUE_PARTIAL:
+        elif self.state == CLUE_PARTIAL:
             return style.YELLOW
-        elif self.solved == CLUE_SOLVED:
+        elif self.state == CLUE_SOLVED:
             return style.GREEN
         return style.RESET

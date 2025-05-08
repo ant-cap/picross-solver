@@ -43,8 +43,6 @@ def _Load5x5Puzzles(db: Database):
         fp.readline()
         count = 3
 
-    print(l)
-
     puzzles = []
     for p in l:
         if p:

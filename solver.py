@@ -11,15 +11,19 @@ class Solver:
         self.turns: list[Turn] = []
 
     def Execute(self):
+        print(str(self.puzzle) + "    Initial Puzzle")
         while True:
             turn = Turn(self)
             self.turns.append(turn)
 
-            print(self)
             if turn.move.decision == DIAG_NONE or turn.move.decision == DIAG_ERROR:
                 break
 
+            self.puzzle.Update()
+
+            print(self)
+
 
     def __str__(self):
-        s = "    Move {}".format(len(self.moves))
+        s = "    Move {}".format(len(self.turns))
         return str(self.puzzle) + s

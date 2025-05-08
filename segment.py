@@ -1,3 +1,48 @@
+from clue import Clue
+from cell     import Cell, CELL_FILLED
+from sequence import Sequence
+
 class Segment:
-    def __init__(self):
-        self.solved = False
+    def __init__(self, cells, clues = []):
+        self.solved: bool = False
+        self.cells: list[Cell] = cells
+        self.clues: list[Clue] = clues
+        self.sequences: list[Sequence] = self.GenerateSequences()
+
+    def GenerateSequences(self):
+        sequences = []
+        cells = self.cells
+        i = 0
+        while i < len(cells):
+            if cells[i].state() is CELL_FILLED:
+                length = 0
+                j = i
+                while cells[j].state() is CELL_FILLED:
+                    length += 1
+                    j += 1
+                    if j >= len(cells):
+                        break
+                sequences.append(Sequence(i, length))
+                i = j
+            else:
+                i += 1
+        return sequences
+        
+    def add_clue(self, clue: Clue | list[Clue]):
+        if isinstance(clue, Clue):
+            self.clues.append(clue)
+        else:
+            for c in clue:
+                self.clues.append(c)
+
+        self.solved = self.CheckSolved()
+    
+    def CheckSolved(self) -> bool:
+        clues = self.clues
+        seqs = self.sequences
+        if not len(self.clues):
+            return False
+        if len(clues) == 1 and len(seqs) == 1:
+            if clues[0].value == seqs[0].length:
+                return True
+        return False
