@@ -9,15 +9,17 @@ class Segment:
         self.clues: list[Clue] = clues
         self.sequences: list[Sequence] = self.GenerateSequences()
 
+    
+
     def GenerateSequences(self):
         sequences = []
         cells = self.cells
         i = 0
         while i < len(cells):
-            if cells[i].state() is CELL_FILLED:
+            if cells[i].state is CELL_FILLED:
                 length = 0
                 j = i
-                while cells[j].state() is CELL_FILLED:
+                while cells[j].state is CELL_FILLED:
                     length += 1
                     j += 1
                     if j >= len(cells):
@@ -34,8 +36,6 @@ class Segment:
         else:
             for c in clue:
                 self.clues.append(c)
-
-        self.solved = self.CheckSolved()
     
     def CheckSolved(self) -> bool:
         clues = self.clues

@@ -1,18 +1,42 @@
 from clue import Clue, CLUE_UNSOLVED, CLUE_PARTIAL, CLUE_SOLVED
 from cell import Cell, CELL_EMPTY, CELL_FILLED, CELL_CROSSED
 from segment import Segment
+from span import Span
 
 class Line:
     def __init__(self, cells: list[Cell], clues: list[Clue]):
         self.cells: list[Cell] = cells
         self.clues: list[Clue] = clues
-        self.segments: list[Segment] = self.GenerateSegments()
+        self.segments: list[Segment] = [Segment(cells, clues)]
+        self.spans: list[Span] = self.GenerateSpans()
 
     def __str__(self):
         return str(self.clues) + str(self.cells)
 
     def __repr__(self):
         return self.__str__()
+    
+    def GenerateSpans(self) -> list[Span]:
+        clues = self.clues
+        cclues = [clue for clue in clues]
+        cells = self.cells
+        if len(clues) == 1:
+            return [Span(clues[0], cells)]
+        li = clues[0].value + 1
+        ri = len(cells) - 1 - clues[-1].value
+
+        first = Span(cclues.pop(0), cells[: clues[0].value + 1])
+        last = Span(cclues.pop(), cells[ri : len(cells) - 1])
+
+        
+
+
+        spans = [first]
+
+
+        spans.append(last)
+        return spans
+
 
     def GenerateSegments(self) -> list[Segment]:
         segments = []

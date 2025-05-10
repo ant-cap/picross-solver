@@ -1,6 +1,7 @@
 
 from puzzle import Puzzle
 from line import Line
+from segment import Segment
 from clue import Clue, CLUE_SOLVED
 
 from utility import DIAG_ERROR, DIAG_NONE, DIAG_DELETE, DIAG_SOLVABLE, \
@@ -19,23 +20,22 @@ class Move:
         self.DecideMove()
 
     def DecideMove(self):
-        def ProposeDecision(decision: int, line: Line):
-            if self.decision == DIAG_NONE:
+        def ProposeDecision(decision: int, line: Line) -> bool:
+            if self.decision == DIAG_NONE or self.decision > decision:
                 self.decision = decision
                 self.line = line
-            elif self.decision > decision:
-                self.decision = decision
-                self.line = line
+                return True
+            return False
     
         for line in self.lines:
-            try:
-                if self.CanDelete(line):
-                    ProposeDecision(DIAG_DELETE, line)
+            if CanDeleteLine(line):
+                if ProposeDecision(DIAG_DELETE, line):
                     break
-            except Exception as e:
-                self.exception = e
-                self.decision = DIAG_ERROR
-                return
+            for seg in line.segments:
+                if CanSolveSegment(seg):
+                    #if ProposeDecision(DIAG_)
+                    pass
+                
             self.decision = DIAG_NONE
         try:
             DoMove(self.line, self.decision)
@@ -43,23 +43,30 @@ class Move:
             self.exception = e
             return
         
-    def CanDelete(self, line: Line) -> bool:
-        if not line.clues:
-            return True
-        if line.clues[0].value == 0 and line.clues[0].state != CLUE_SOLVED:
-            return True
-        return False
+        #self.VerifySolvedSegments()
     
-    def CanSolveSegment(self, line: Line) -> bool:
-        for i in range(len(line.segments)):
-            segment = line.segments[i]
-            if segment.solved:
-                continue
-            
-        
+def CanDeleteLine(line: Line) -> bool:
+    if not line.clues:
+        return True
+    if line.clues[0].value == 0 and line.clues[0].state != CLUE_SOLVED:
+        return True
+    return False
+
+def CanSolveSegment(segment: Segment) -> bool:
+    if segment.solved:
+        return False
+    clues  = segment.clues
+    length = len(segment.cells)
+    tally  = 0
+    for i in range(len(clues)):
+        tally += clues[i].value + 1
+    tally -= 1
+    if tally == length:
+        return True
+
 def DoMove(line: Line, decision: int):
-    def Cross(start: int, stop: int = 0):
-        if stop == 0:
+    def Cross(start: int, stop: int = None):
+        if not stop:
             for i in range(start, len(line.cells)):
                 line.cells[i].SetState(CELL_CROSSED)
             return
@@ -71,4 +78,3 @@ def DoMove(line: Line, decision: int):
     if decision == DIAG_DELETE:
         if line.clues[0].value == 0:
             Cross(0)
-    
