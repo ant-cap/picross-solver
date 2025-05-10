@@ -12,7 +12,9 @@ class Solver:
 
     def Execute(self):
         print(str(self.puzzle) + "    Initial Puzzle")
-        while True:
+        i = 0
+        while i < 3:
+        #while True:
             turn = Turn(self)
             self.turns.append(turn)
 
@@ -23,7 +25,9 @@ class Solver:
 
             print(self)
 
+            i += 1
+
 
     def __str__(self):
-        s = "    Move {}".format(len(self.turns))
+        s = "    Move {} {}".format(len(self.turns), self.turns[-1])
         return str(self.puzzle) + s

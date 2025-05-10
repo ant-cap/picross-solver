@@ -15,30 +15,30 @@ class Move:
         self.decision: int = DIAG_NONE
         self.exception: Exception = None
 
-        self.line = None
-
+        self.segment = None
         self.DecideMove()
 
+    def __str__(self):
+        return "[DIAG: {}]".format(self.decision)
+
     def DecideMove(self):
-        def ProposeDecision(decision: int, line: Line) -> bool:
+        def ProposeDecision(decision: int, segment: Segment) -> bool:
             if self.decision == DIAG_NONE or self.decision > decision:
                 self.decision = decision
-                self.line = line
-                return True
-            return False
+                self.segment = segment
     
         for line in self.lines:
+            #print("line:", line)
             if CanDeleteLine(line):
-                if ProposeDecision(DIAG_DELETE, line):
-                    break
+                ProposeDecision(DIAG_DELETE, line.segments[0])
+                #break
             for seg in line.segments:
                 if CanSolveSegment(seg):
-                    #if ProposeDecision(DIAG_)
-                    pass
-                
-            self.decision = DIAG_NONE
+                    ProposeDecision(DIAG_SOLVABLE, seg)
+                    #break
+        #print("The Decision:", self.decision)
         try:
-            DoMove(self.line, self.decision)
+            DoMove(self.segment, self.decision)
         except Exception as e:
             self.exception = e
             return
@@ -63,18 +63,30 @@ def CanSolveSegment(segment: Segment) -> bool:
     tally -= 1
     if tally == length:
         return True
+    return False
 
-def DoMove(line: Line, decision: int):
-    def Cross(start: int, stop: int = None):
+def DoMove(segment: Segment, decision: int):
+    def SetStates(state: int, start: int, stop: int = None):
         if not stop:
-            for i in range(start, len(line.cells)):
-                line.cells[i].SetState(CELL_CROSSED)
+            for i in range(start, len(segment.cells)):
+                segment.cells[i].SetState(state)
             return
         for i in range(start, stop):
-            line.cells[i].SetState(CELL_CROSSED)
+            segment.cells[i].SetState(state)
 
     if decision == DIAG_ERROR or decision == DIAG_NONE:
         return
+    
+    cells = segment.cells
+    clues = segment.clues
     if decision == DIAG_DELETE:
-        if line.clues[0].value == 0:
-            Cross(0)
+        if clues[0].value == 0:
+            SetStates(CELL_CROSSED, 0)
+    elif decision == DIAG_SOLVABLE:
+        cell_i = 0
+        for i in range(len(clues)):
+            SetStates(CELL_FILLED, cell_i, cell_i + clues[i].value)
+            cell_i += clues[i].value + 1
+            if cell_i >= len(cells):
+                break
+        assert cell_i >= len(cells)

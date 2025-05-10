@@ -1,7 +1,7 @@
 from solver import Solver
 from database import Database
 
-def main():
+def main(): 
     db = Database()
 
     puzzles = db['5x5']

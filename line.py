@@ -7,11 +7,15 @@ class Line:
     def __init__(self, cells: list[Cell], clues: list[Clue]):
         self.cells: list[Cell] = cells
         self.clues: list[Clue] = clues
-        self.segments: list[Segment] = [Segment(cells, clues)]
+        self.segments: list[Segment] = [Segment(cells)]
+        self.AssignClues()
         self.spans: list[Span] = self.GenerateSpans()
 
     def __str__(self):
-        return str(self.clues) + str(self.cells)
+        st = ""
+        for s in self.segments:
+            st += str(s)
+        return str(self.clues) + st
 
     def __repr__(self):
         return self.__str__()
@@ -28,8 +32,7 @@ class Line:
         first = Span(cclues.pop(0), cells[: clues[0].value + 1])
         last = Span(cclues.pop(), cells[ri : len(cells) - 1])
 
-        
-
+        #for i in range()
 
         spans = [first]
 

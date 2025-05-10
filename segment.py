@@ -3,13 +3,14 @@ from cell     import Cell, CELL_FILLED
 from sequence import Sequence
 
 class Segment:
-    def __init__(self, cells, clues = []):
+    def __init__(self, cells):
         self.solved: bool = False
         self.cells: list[Cell] = cells
-        self.clues: list[Clue] = clues
+        self.clues: list[Clue] = []
         self.sequences: list[Sequence] = self.GenerateSequences()
 
-    
+    def __str__(self):
+        return "{} Clues: {}".format(self.cells, self.clues)
 
     def GenerateSequences(self):
         sequences = []
@@ -36,6 +37,7 @@ class Segment:
         else:
             for c in clue:
                 self.clues.append(c)
+        self.clues = list(set(self.clues))
     
     def CheckSolved(self) -> bool:
         clues = self.clues

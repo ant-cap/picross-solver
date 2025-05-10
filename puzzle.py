@@ -85,6 +85,8 @@ class Puzzle:
                 if self.cells[x][y].changedState:
                     updates.add(self.columns[x])
                     updates.add(self.rows[y])
+
+        #print("updates:", updates)
         
         for line in updates:
             line.Update()

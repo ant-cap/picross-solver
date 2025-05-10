@@ -5,4 +5,5 @@ class Turn:
         self.solver = solver
         self.move = Move(self)
         
-        
+    def __str__(self):
+        return str(self.move)
