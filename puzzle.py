@@ -78,8 +78,9 @@ class Puzzle:
             hori_clues_grid_str += "\n"
         return vert_clues_str + hori_clues_grid_str + self.name
     
-    def Update(self):
+    def Update(self, moveLine: Line):
         updates: set[Line] = set()
+        updates.add(moveLine)
         for x in range(self.dx):
             for y in range(self.dy):
                 if self.cells[x][y].changedState:

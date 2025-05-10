@@ -1,4 +1,4 @@
-from clue import Clue
+from clue import Clue, CLUE_PARTIAL, CLUE_SOLVED
 from cell     import Cell, CELL_FILLED
 from sequence import Sequence
 
@@ -41,10 +41,12 @@ class Segment:
     
     def CheckSolved(self) -> bool:
         clues = self.clues
-        seqs = self.sequences
+        seqs = self.GenerateSequences()
         if not len(self.clues):
             return False
         if len(clues) == 1 and len(seqs) == 1:
             if clues[0].value == seqs[0].length:
+                self.solved = True
+                clues[0].state = CLUE_SOLVED
                 return True
         return False

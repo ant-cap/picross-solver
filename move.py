@@ -15,32 +15,33 @@ class Move:
         self.decision: int = DIAG_NONE
         self.exception: Exception = None
 
-        self.segment = None
+        self.segment: Segment = None
+        self.line: Line = None
         self.DecideMove()
 
     def __str__(self):
         return "[DIAG: {}]".format(self.decision)
 
     def DecideMove(self):
-        def ProposeDecision(decision: int, segment: Segment) -> bool:
+        def ProposeDecision(decision: int, line: Line, segment: Segment) -> bool:
             if self.decision == DIAG_NONE or self.decision > decision:
                 self.decision = decision
                 self.segment = segment
+                self.line = line
     
         for line in self.lines:
-            #print("line:", line)
             if CanDeleteLine(line):
-                ProposeDecision(DIAG_DELETE, line.segments[0])
-                #break
+                ProposeDecision(DIAG_DELETE, line, line.segments[0])
             for seg in line.segments:
                 if CanSolveSegment(seg):
-                    ProposeDecision(DIAG_SOLVABLE, seg)
+                    ProposeDecision(DIAG_SOLVABLE, line, seg)
                     #break
         #print("The Decision:", self.decision)
         try:
             DoMove(self.segment, self.decision)
         except Exception as e:
             self.exception = e
+            print(e)
             return
         
         #self.VerifySolvedSegments()
@@ -55,6 +56,10 @@ def CanDeleteLine(line: Line) -> bool:
 def CanSolveSegment(segment: Segment) -> bool:
     if segment.solved:
         return False
+    
+    if len(segment.clues) == 1 and segment.clues[0].state == CLUE_SOLVED:
+        return False
+    
     clues  = segment.clues
     length = len(segment.cells)
     tally  = 0
@@ -80,13 +85,14 @@ def DoMove(segment: Segment, decision: int):
     cells = segment.cells
     clues = segment.clues
     if decision == DIAG_DELETE:
-        if clues[0].value == 0:
-            SetStates(CELL_CROSSED, 0)
+            if clues[0].value == 0:
+                SetStates(CELL_CROSSED, 0)
     elif decision == DIAG_SOLVABLE:
-        cell_i = 0
-        for i in range(len(clues)):
-            SetStates(CELL_FILLED, cell_i, cell_i + clues[i].value)
-            cell_i += clues[i].value + 1
-            if cell_i >= len(cells):
-                break
-        assert cell_i >= len(cells)
+            cell_i = 0
+            for i in range(len(clues)):
+                SetStates(CELL_FILLED, cell_i, cell_i + clues[i].value)
+                cell_i += clues[i].value + 1
+                if cell_i >= len(cells):
+                    break
+            assert cell_i >= len(cells)
+            assert segment.CheckSolved() == True
