@@ -32,7 +32,8 @@ class Line:
         first = Span(cclues.pop(0), cells[: clues[0].value + 1])
         last = Span(cclues.pop(), cells[ri : len(cells) - 1])
 
-        #for i in range()
+        #for i in range(len(cclues)):
+
 
         spans = [first]
 
@@ -103,6 +104,7 @@ class Line:
             #print("wtf.")
             return
         if len(segments) == 1:
+            print("segment:", segments[0])
             segments[0].add_clue(self.clues)
         else:
             ftob = WalkSegments(segments)
@@ -114,6 +116,9 @@ class Line:
                         final[i].append(ftob[i][j])
             for i in range(len(segments)):
                 segments[i].add_clue(final[i])
+        for i in range(len(segments)):
+            #segments.
+            pass
         self.segments = segments
 
     def Update(self):
