@@ -13,12 +13,13 @@ class Solver:
     def Execute(self):
         print(str(self.puzzle) + "    Initial Puzzle")
         i = 0
-        while i < 5:
+        while i < 9:
         #while True:
             turn = Turn(self)
             self.turns.append(turn)
 
             if turn.move.decision == DIAG_NONE or turn.move.decision == DIAG_ERROR:
+                print("Finished:", turn)
                 break
 
             self.puzzle.Update(turn.move.line)
@@ -29,5 +30,4 @@ class Solver:
 
 
     def __str__(self):
-        s = "    Move {} {}".format(len(self.turns), self.turns[-1])
-        return str(self.puzzle) + s
+        return str(self.puzzle) + "    Move {} {} {}".format(len(self.turns), self.turns[-1], self.turns[-1].move.line)

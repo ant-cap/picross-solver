@@ -1,13 +1,15 @@
 from clue import Clue, CLUE_UNSOLVED, CLUE_PARTIAL, CLUE_SOLVED
 from cell import Cell, CELL_EMPTY, CELL_FILLED, CELL_CROSSED
-from segment import Segment
+from segment import Segment, GenerateSegments
+from sequence import Sequence, GenerateSequences
 from span import Span
 
 class Line:
     def __init__(self, cells: list[Cell], clues: list[Clue]):
         self.cells: list[Cell] = cells
         self.clues: list[Clue] = clues
-        self.segments: list[Segment] = [Segment(cells)]
+        self.segments: list[Segment] = [Segment(0, cells)]
+        self.sequences: list[Sequence] = []
         self.AssignClues()
         self.spans: list[Span] = self.GenerateSpans()
 
@@ -32,38 +34,12 @@ class Line:
         first = Span(cclues.pop(0), cells[: clues[0].value + 1])
         last = Span(cclues.pop(), cells[ri : len(cells) - 1])
 
-        #for i in range(len(cclues)):
-
-
         spans = [first]
 
+        # do shjit here
 
         spans.append(last)
         return spans
-
-
-    def GenerateSegments(self) -> list[Segment]:
-        segments = []
-        cells = self.cells
-        i = 0
-        while cells[i].state == CELL_CROSSED:
-            i += 1
-            if i >= len(cells):
-                return segments
-        while i < len(cells):
-            segcells = []
-            while cells[i].state != CELL_CROSSED:
-                segcells.append(cells[i])
-                i += 1
-                if i >= len(cells):
-                    break
-            segments.append(Segment(segcells))
-            if i < len(cells):
-                while cells[i].state == CELL_CROSSED:
-                    i += 1
-                    if i >= len(cells):
-                        return segments
-        return segments
 
     def AssignClues(self) -> None:
         def WalkSegments(reverse: bool = False):
@@ -95,6 +71,8 @@ class Line:
             if reverse:
                 assignments.reverse()
             return assignments
+        
+
 
         segments = self.segments
         if not segments:
@@ -104,11 +82,10 @@ class Line:
             #print("wtf.")
             return
         if len(segments) == 1:
-            print("segment:", segments[0])
             segments[0].add_clue(self.clues)
         else:
-            ftob = WalkSegments(segments)
-            btof = WalkSegments(segments, reverse=True)
+            ftob = WalkSegments()
+            btof = WalkSegments(reverse=True)
             final = [[] for segment in segments]
             for i in range(len(segments)):
                 for j in range(len(ftob[i])):
@@ -116,12 +93,18 @@ class Line:
                         final[i].append(ftob[i][j])
             for i in range(len(segments)):
                 segments[i].add_clue(final[i])
-        for i in range(len(segments)):
+        for i in range(len(segments)): 
             #segments.
             pass
         self.segments = segments
 
     def Update(self):
-        self.segments = self.GenerateSegments()
+        self.segments = GenerateSegments(self.cells)
+        self.sequences = GenerateSequences(self.cells)
         self.AssignClues()
 
+    def IsSolved(self):
+        for i in range(len(self.clues)):
+            if self.clues[i].state != CLUE_SOLVED:
+                return False
+        return True
