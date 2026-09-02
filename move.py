@@ -3,9 +3,9 @@ from puzzle import Puzzle
 from line import Line
 from segment import Segment
 from clue import Clue, CLUE_SOLVED
+from cell import CELL_EMPTY, CELL_FILLED, CELL_CROSSED
 
-from utility import DIAG_ERROR, DIAG_NONE, DIAG_DELETE, DIAG_SEGSOLVABLE, DIAG_LINESOLVED, \
-                    CELL_EMPTY, CELL_FILLED, CELL_CROSSED
+from states import DIAG_ERROR, DIAG_NONE, DIAG_DELETE, DIAG_SEGSOLVABLE, DIAG_LINESOLVED
 
 class Move:
     def __init__(self, turn):

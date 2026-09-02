@@ -1,3 +1,4 @@
+
 from line import Line
 from clue import Clue
 from cell import Cell
@@ -91,3 +92,4 @@ class Puzzle:
         
         for line in updates:
             line.Update()
+            

@@ -1,3 +1,4 @@
+
 from clue import Clue, CLUE_UNSOLVED, CLUE_PARTIAL, CLUE_SOLVED
 from cell import Cell, CELL_EMPTY, CELL_FILLED, CELL_CROSSED
 from segment import Segment, GenerateSegments
@@ -108,3 +109,4 @@ class Line:
             if self.clues[i].state != CLUE_SOLVED:
                 return False
         return True
+        

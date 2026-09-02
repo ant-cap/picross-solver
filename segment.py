@@ -1,3 +1,4 @@
+
 from clue import Clue, CLUE_PARTIAL, CLUE_SOLVED
 from cell     import Cell, CELL_FILLED, CELL_CROSSED
 from sequence import Sequence, GenerateSequences
@@ -58,3 +59,4 @@ def GenerateSegments(cells: list[Cell]) -> list[Segment]:
                 if i >= len(cells):
                     return segments
     return segments
+    

@@ -1,4 +1,6 @@
-from utility import CELL_EMPTY, CELL_FILLED, CELL_CROSSED, style
+
+from states import CELL_EMPTY, CELL_FILLED, CELL_CROSSED
+from utility import style
 
 '''
 Defines a cell on the grid.
@@ -29,3 +31,4 @@ class Cell:
             return
         self.state = state
         self.changedState = True
+        

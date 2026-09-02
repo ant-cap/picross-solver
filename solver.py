@@ -1,9 +1,9 @@
+
 from puzzle import Puzzle
 from turn import Turn
 
-from utility import (
-    DIAG_NONE, DIAG_ERROR
-)
+from states import DIAG_NONE, DIAG_ERROR
+
 
 class Solver:
     def __init__(self, puzzle: Puzzle):

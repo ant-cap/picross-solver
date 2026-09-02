@@ -1,3 +1,4 @@
+
 from cell import Cell, CELL_FILLED
 
 '''
@@ -32,3 +33,4 @@ def GenerateSequences(cells: list[Cell]) -> list[Sequence]:
             else:
                 i += 1
         return sequences
+        

@@ -1,19 +1,3 @@
-# Cell States
-CELL_EMPTY   = 0
-CELL_FILLED  = 1
-CELL_CROSSED = 2
-
-# Clue States
-CLUE_UNSOLVED = 0
-CLUE_PARTIAL  = 1
-CLUE_SOLVED   = 2
-
-# Diagnosis Values
-DIAG_ERROR        = -1
-DIAG_NONE         = 0
-DIAG_DELETE       = 1
-DIAG_LINESOLVED   = 2
-DIAG_SEGSOLVABLE  = 3
 
 """credits to stackoverflow"""
 class style:
@@ -35,3 +19,4 @@ def get_super(x):
     super_s = "⁰¹²³⁴⁵⁶⁷⁸⁹"
     res = x.maketrans(''.join(normal), ''.join(super_s)) 
     return x.translate(res) 
+    

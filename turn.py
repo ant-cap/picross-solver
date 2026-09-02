@@ -1,3 +1,4 @@
+
 from move import Move
 
 class Turn:

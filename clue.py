@@ -1,5 +1,7 @@
-from utility import CLUE_UNSOLVED, CLUE_PARTIAL, CLUE_SOLVED, get_super, style
+
 from sequence import Sequence
+from states import CLUE_UNSOLVED, CLUE_PARTIAL, CLUE_SOLVED
+from utility import get_super, style
 
 '''
 Defines the tomography hints that are initially provided.
@@ -27,3 +29,4 @@ class Clue:
         elif self.state == CLUE_SOLVED:
             return style.GREEN
         return style.RESET
+        

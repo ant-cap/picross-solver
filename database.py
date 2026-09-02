@@ -1,3 +1,4 @@
+
 from puzzle import Puzzle
 
 class Database:
